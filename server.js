@@ -1,11 +1,23 @@
-const express = require("express");
+const { default: mongoose } = require("mongoose");
+const app = require("./app");
+const { MONGODB_URI, PORT } = require("./utils/configs");
 
-const app = express();
+mongoose
+    .connect(MONGODB_URI)
+    .then(() => {
+        console.log('connected to database');
+        console.log("connecting to server");
 
-app.get('/',(req,res)=>{
-    res.json({message:"running servers!!!"})
-});
+        app.listen(PORT, () => {
+            console.log("connected to server")
+            console.log(`server runs on http://localhost:${PORT}`)
+        });
+    })
+    .catch((err) => {
+        console.log("erorr connecting to database", err)
 
-app.listen(3000,()=>{
-    console.log("server running on http://localhost:3000")
-})
+    });
+
+
+
+
